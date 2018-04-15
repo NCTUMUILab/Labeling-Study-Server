@@ -76,6 +76,7 @@ def time_interval():
     elif collection=='isAlive':
         col = mongo.db.isAlive
     elif collection=='sample':
+        col = mongo.db.sample
 
     json_docs = []
     number = col.find({'device_id':d_id, 'startTime': {'$gte':str(start["$date"])}, 'endTime': {'$lt': str(end["$date"])}}).count()
