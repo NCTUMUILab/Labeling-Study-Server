@@ -43,22 +43,19 @@ def find_latest_and_insert():
             
         elif action=='insert':
             json_request = request.get_json(force=True, silent=True)
-            content = json.loads(json_request)
+            print (json_request)  # contain _id field
             if collection=='trip':
                 data = dict()
                 # need to handle update #
-                key = content.keys()
+                key = json_request.keys()
                 for i in key:
                     if i!='_id':
-                        data[i] = content[i]
-                h_id =  (content['_id']['$oid'])
-                o_id = ObjectId(h_id)
-                user.update({'_id':o_id}, {'$set':data}, upsert=True, multi=True)
-
-                return 'updated!'
+                        data[i] = json_request[i]
+                user.update({'_id':json_request['_id']}, {'$set':data}, upsert=True, multi=True)
+                return json.dumps({'createdTime':json_request['createdTime']})
             else:
-                user.insert(content)
-                return "insert OK!"
+                user.insert(json_request)
+                return 'insert OK!'
 
 @app.route('/time_interval', methods=['POST'])
 def time_interval():
